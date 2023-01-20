@@ -8,8 +8,7 @@ public class InnerEdge<E, V> {
     private Position position;
     private InnerVertex<V, E>[] endpoints;
 
-    public InnerEdge(InnerVertex<V, E> u, InnerVertex<V, E> v,
-                     E element) {
+    public InnerEdge(InnerVertex<V, E> u, InnerVertex<V, E> v, E element) {
 
         this.element = element;
         endpoints = (InnerVertex<V, E>[]) new InnerVertex[]{u,v};

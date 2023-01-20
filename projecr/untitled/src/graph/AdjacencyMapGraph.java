@@ -1,16 +1,23 @@
 package graph;
 
-import javax.swing.text.Position;
+import user.User;
+
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 public class AdjacencyMapGraph<V, E> {
 
-    private ArrayList<InnerVertex<V,E>> vertices = new ArrayList<>();
-    private ArrayList<InnerEdge<E,V>> edges = new ArrayList<>();
+    private final ArrayList<InnerVertex<V,E>> vertices = new ArrayList<>();
+    private final ArrayList<InnerEdge<E,V>> edges = new ArrayList<>();
 
     public AdjacencyMapGraph() {}
+
+    public ArrayList<InnerEdge<E, V>> getEdges() {
+        return edges;
+    }
+
+    public ArrayList<InnerVertex<V, E>> getVertices() {
+        return vertices;
+    }
 
     public int numVertices() {
         return vertices.size();
@@ -55,11 +62,17 @@ public class AdjacencyMapGraph<V, E> {
             throw new IllegalArgumentException("Edge from u to v exists");
     }
 
-
     public void removeVertex(InnerVertex<V,E> vertex) {
         for (InnerEdge<E,V> edge: vertex.getEdges().values())
             edges.remove(edge);
         vertices.remove(vertex);
+    }
+
+    public InnerVertex<V,E> getVertex(User user) {
+        for (InnerVertex<V,E> vertex: vertices)
+            if ( ((User)vertex.getElement()).getId().equals(user.getId()))
+                return vertex;
+        return null;
     }
 
 }
