@@ -4,17 +4,20 @@ import main.Main;
 import user.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SuggestedUser {
 
     private final User user;
     private final Map<String, Integer> priority;
-    private Map<User, Integer> scores;
+    private Map<User, Integer> scores = new HashMap<>();
+    private final ArrayList<User> connections;
 
-    public SuggestedUser(User user, Map<String,Integer> priority) {
+    public SuggestedUser(User user, Map<String,Integer> priority, ArrayList<User> connections) {
         this.user = user;
         this.priority = priority;
+        this.connections = connections;
     }
 
     private int specialityScore(User user, User connecting) {
@@ -65,9 +68,9 @@ public class SuggestedUser {
     }
 
     private void rateUsers() {
-        for (User u: Main.users) {
+        for (User u: connections) {
             int totalScore = totalScore(u);
-            if (totalScore > 50)
+            if (totalScore >= 5)
                 scores.put(u, totalScore);
         }
     }

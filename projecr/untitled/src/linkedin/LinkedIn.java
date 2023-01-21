@@ -78,7 +78,9 @@ public class LinkedIn {
     }
 
     public ArrayList<User> suggestedUsers(Map<String, Integer> priority) {
-        SuggestedUser suggestedUser = new SuggestedUser(user, priority);
+        ArrayList<User> connections = new ArrayList<>();
+        connections = getConnections(adjacencyMapGraph.getVertex(user));
+        SuggestedUser suggestedUser = new SuggestedUser(user, priority,connections);
         return suggestedUser.suggestedUsers();
     }
 
