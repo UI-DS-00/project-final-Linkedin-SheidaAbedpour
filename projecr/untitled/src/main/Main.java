@@ -16,7 +16,8 @@ import java.util.Scanner;
 public class Main {
 
     public static User[] users;
-    private static AdjacencyMapGraph<User,?> adjacencyMapGraph;
+    private static AdjacencyMapGraph<user.User,Integer> adjacencyMapGraph;
+    private static User user;
 
     public static void main(String[] args) {
 
@@ -29,24 +30,30 @@ public class Main {
 
     private static void showMenu() {
 
-        System.out.println("1.login / 2.show list of all users / 3.search user");
+        System.out.println("1.login / 2.show list of all users / 3.search user / 4.exit");
         Scanner scanner = new Scanner(System.in);
         int command = scanner.nextInt();
 
-        switch (command) {
-            case 1:
-                login();
-                break;
-            case 2:
-                System.out.println("users: ");
-                for (User user: users)
-                    System.out.println(user);
-                System.out.println("----------------------------------------------------------------------------------");
-                System.out.println();
-                break;
-            case 3:
+        while (command != 4) {
+            switch (command) {
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    System.out.println("users: ");
+                    for (User user : users)
+                        System.out.println(user);
+                    System.out.println("----------------------------------------------------------------------------------");
+                    System.out.println();
+                    break;
+                case 3:
+                    search();
+                    break;
+            }
 
-                break;
+            System.out.println();
+            System.out.println("1.login / 2.show list of all users / 3.search user / 4.exit");
+            command = scanner.nextInt();
         }
 
     }
@@ -55,7 +62,7 @@ public class Main {
         System.out.println("enter your id: ");
         Scanner scanner = new Scanner(System.in);
         String id = scanner.next();
-        User user = getUser(id);
+        user = getUser(id);
 
         if (user == null) {
             System.out.println("incorrect id. try again. ");
@@ -83,6 +90,28 @@ public class Main {
         // connect others
         // log out
 
+    }
+
+    private static void search() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("enter id : ");
+        String search = scanner.next();
+        User searched = getUser(search);
+        System.out.println(searched);
+        System.out.println();
+        System.out.println("connect? : 1.yes  2.no ");
+        int connect = scanner.nextInt();
+        if (connect == 1) {
+            while (user == null) {
+                System.out.println("you have to login first! id: ");
+                user = getUser(scanner.next());
+            }
+            connect(user, searched);
+        }
+    }
+
+    private static void connect(User user, User connect) {
+        adjacencyMapGraph.insertEdge(adjacencyMapGraph.getVertex(user),adjacencyMapGraph.getVertex(connect),null);
     }
 
     private static ArrayList<User> getSuggested(User user, Map<String, Integer> priority) {
