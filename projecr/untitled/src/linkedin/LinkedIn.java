@@ -71,6 +71,12 @@ public class LinkedIn {
 
             level = nextLevel;
 
+            if (nextLevels == null) {
+                for (InnerVertex<user.User,?> newVertex: adjacencyMapGraph.getVertices())
+                    if (!visited.contains(newVertex))
+                        nextLevels.add(newVertex);
+            }
+
             if (levelNumber >= 6 && connectingList.size() > 60) {
                 nextLevels = nextLevel;
                 break;
@@ -84,10 +90,11 @@ public class LinkedIn {
     public ArrayList<User> suggestedUsers(Map<String, Integer> priority) {
         ArrayList<User> connections;
         connections = getConnections(adjacencyMapGraph.getVertex(user));
+
         SuggestedUser suggestedUser = new SuggestedUser(user, priority, connections);
 
         ArrayList<User> suggestedList = suggestedUser.suggestedUsers();
-        while (suggestedList.size() < 20) {
+        while (suggestedList.size() < 20 || connections.size() == 0) {
 
             if (nextLevels.isEmpty()) {
                 for (InnerVertex<user.User, ?> newUser : adjacencyMapGraph.getVertices())
