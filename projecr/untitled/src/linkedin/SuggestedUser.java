@@ -11,7 +11,7 @@ public class SuggestedUser {
 
     private final User user;
     private final Map<String, Integer> priority;
-    private Map<User, Integer> scores = new HashMap<>();
+    private final Map<User, Integer> scores = new HashMap<>();
     private final ArrayList<User> connections;
 
     public SuggestedUser(User user, Map<String,Integer> priority, ArrayList<User> connections) {
@@ -58,8 +58,7 @@ public class SuggestedUser {
     }
 
     private int getScore(double similarity, int priority) {
-        int similarityScore = (int) (similarity / 25);      // 0 - 4
-        return similarityScore * priority;                  // 0 - 20
+        return (int) similarity * priority;
     }
 
     private int totalScore(User connecting) {
@@ -70,7 +69,7 @@ public class SuggestedUser {
     private void rateUsers() {
         for (User u: connections) {
             int totalScore = totalScore(u);
-            if (totalScore >= 5)
+            if (totalScore >= 200)
                 scores.put(u, totalScore);
         }
     }
@@ -88,9 +87,9 @@ public class SuggestedUser {
         ArrayList<User> list = new ArrayList<>(scores.keySet());
 
         for (int i = 0; i < list.size() - 1; i++)
-            for (int j = 0; j < list.size() - i - 1; j++)
+            for (int j = 0; j < list.size() - 1; j++)
                 if (scores.get(list.get(j)) < scores.get(list.get(j + 1)) ) {
-                    User temp = list.get(i);
+                    User temp = list.get(j);
                     list.set(j, list.get(j + 1));
                     list.set(j + 1, temp);
                 }
@@ -100,6 +99,11 @@ public class SuggestedUser {
 
     public ArrayList<User> suggestedUsers() {
         rateUsers();
+
+        if (scores.size() < 20) {
+
+        }
+
         return sort();
     }
 

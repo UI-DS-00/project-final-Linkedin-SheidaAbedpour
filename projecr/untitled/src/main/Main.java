@@ -69,8 +69,8 @@ public class Main {
 
         Map<String, Integer> priority = new HashMap<>();
         priority.put("specialities",5);
-        priority.put("universityLocation", 2);
-        priority.put("field", 3);
+        priority.put("universityLocation", 1);
+        priority.put("field", 1);
         priority.put("workplace", 1);
 
         ArrayList<User> suggested = getSuggested(user, priority);

@@ -29,7 +29,7 @@ public class Similarity {
         double similarity = 0;
 
         if (user1.getUniversityLocation().equals(user2.getUniversityLocation()))
-            similarity++;
+            similarity += 0.5;
 
         return similarity * 100;
     }
@@ -40,7 +40,7 @@ public class Similarity {
         double similarity = 0;
 
         if (user1.getField().equals(user2.getField()))
-            similarity++;
+            similarity += 0.5;
 
         return similarity * 100;
     }
@@ -50,7 +50,7 @@ public class Similarity {
         double similarity = 0;
 
         if (user1.getWorkplace().equals(user2.getWorkplace()))
-            similarity++;
+            similarity += 0.5;
 
         return similarity * 100;
     }

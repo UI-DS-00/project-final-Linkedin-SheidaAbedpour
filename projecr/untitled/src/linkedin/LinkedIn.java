@@ -55,9 +55,7 @@ public class LinkedIn {
 
                 levelNumber++;
 
-                for (InnerEdge<?, user.User> edge : userInnerVertex.getEdges().values()) {
-
-                    InnerVertex<user.User, ?> opposite = adjacencyMapGraph.opposite(userInnerVertex, edge);
+                for (InnerVertex<user.User,?> opposite : userInnerVertex.getEdges().keySet()) {
 
                     if (!visited.contains(opposite)) {
                         visited.add(opposite);
@@ -66,10 +64,10 @@ public class LinkedIn {
                     }
 
                 }
-
-                if (levelNumber >= 5)
-                    break;
             }
+
+            if (levelNumber >= 5)
+                break;
 
             level = nextLevel;
         }
@@ -80,7 +78,7 @@ public class LinkedIn {
     public ArrayList<User> suggestedUsers(Map<String, Integer> priority) {
         ArrayList<User> connections = new ArrayList<>();
         connections = getConnections(adjacencyMapGraph.getVertex(user));
-        SuggestedUser suggestedUser = new SuggestedUser(user, priority,connections);
+        SuggestedUser suggestedUser = new SuggestedUser(user, priority, connections);
         return suggestedUser.suggestedUsers();
     }
 
