@@ -35,8 +35,8 @@ public class AdjacencyMapGraph<V, E> {
         return e.getEndpoints();
     }
 
-    public InnerVertex<V,E> opposite(InnerVertex<V,E> v, InnerEdge<E,V> e) {
-        InnerVertex<V,E>[] endpoints = e.getEndpoints();
+    public InnerVertex<V,E> opposite(InnerVertex<User, ?> v, InnerEdge<?, User> e) {
+        InnerVertex<V,E>[] endpoints = (InnerVertex<V, E>[]) e.getEndpoints();
         if (endpoints[0] == v)
             return endpoints[1];
         else if (endpoints[1] == v)

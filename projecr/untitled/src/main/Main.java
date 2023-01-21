@@ -2,7 +2,6 @@ package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graph.AdjacencyMapGraph;
-import graph.InnerVertex;
 import user.User;
 
 import java.io.IOException;
@@ -12,9 +11,11 @@ import java.util.ArrayList;
 
 public class Main {
 
+    public static User[] users;
+
     public static void main(String[] args) {
 
-        User[] users = readUsers();
+        users = readUsers();
 
         AdjacencyMapGraph<User,?> adjacencyMapGraph = createGraph(users);
     }
@@ -47,7 +48,7 @@ public class Main {
 
            for (String id: connectionIds) {
                try {
-                   User opposite = getUser(id, users);
+                   User opposite = getUser(id);
                    adjacencyMapGraph.insertEdge(adjacencyMapGraph.getVertex(user), adjacencyMapGraph.getVertex(opposite),null);
                }catch (IllegalArgumentException ignored) {}
            }
@@ -57,7 +58,7 @@ public class Main {
         return adjacencyMapGraph;
     }
 
-    private static User getUser(String id, User[] users) {
+    public static User getUser(String id) {
         for (User user: users)
             if (user.getId().equals(id))
                 return user;
