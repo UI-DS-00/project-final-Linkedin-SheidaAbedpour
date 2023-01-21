@@ -13,6 +13,8 @@ public class LinkedIn {
     private final User user;
     private ArrayList<User> connectedUsers = new ArrayList<>();
     private final AdjacencyMapGraph<user.User,?> adjacencyMapGraph;
+    private Queue<InnerVertex<user.User,?>> nextLevels = new LinkedList<>();
+    private Set<InnerVertex<user.User,?>> visited;
 
     public LinkedIn(User user, AdjacencyMapGraph<user.User,?> adjacencyMapGraph) {
         this.user = user;
@@ -39,7 +41,7 @@ public class LinkedIn {
 
     private ArrayList<User> getConnections(InnerVertex<user.User,?> vertex) {
 
-        Set<InnerVertex<user.User,?>> visited = new HashSet<>();
+        visited = new HashSet<>();
         Queue<InnerVertex<user.User,?>> level = new LinkedList<>();
         ArrayList<user.User> connectingList = new ArrayList<>();
         int levelNumber = 0;
@@ -60,26 +62,48 @@ public class LinkedIn {
                     if (!visited.contains(opposite)) {
                         visited.add(opposite);
                         nextLevel.add(opposite);
-                        connectingList.add(opposite.getElement());
+                        if(levelNumber != 1)
+                            connectingList.add(opposite.getElement());
                     }
 
                 }
             }
 
-            if (levelNumber >= 5)
-                break;
-
             level = nextLevel;
+
+            if (levelNumber >= 6 && connectingList.size() > 60) {
+                nextLevels = nextLevel;
+                break;
+            }
+
         }
 
         return connectingList;
     }
 
     public ArrayList<User> suggestedUsers(Map<String, Integer> priority) {
-        ArrayList<User> connections = new ArrayList<>();
+        ArrayList<User> connections;
         connections = getConnections(adjacencyMapGraph.getVertex(user));
         SuggestedUser suggestedUser = new SuggestedUser(user, priority, connections);
-        return suggestedUser.suggestedUsers();
+
+        ArrayList<User> suggestedList = suggestedUser.suggestedUsers();
+        while (suggestedList.size() < 20) {
+
+            if (nextLevels.isEmpty()) {
+                for (InnerVertex<user.User, ?> newUser : adjacencyMapGraph.getVertices())
+                    if (!visited.contains(newUser))
+                        connections.addAll(getConnections(newUser));
+            }
+
+            else {
+                connections.addAll(getConnections(nextLevels.peek()));
+            }
+
+            suggestedUser.setConnections(connections);
+            suggestedList = suggestedUser.suggestedUsers();
+        }
+
+        return suggestedList;
     }
 
 }

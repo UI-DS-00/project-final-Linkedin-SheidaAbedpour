@@ -12,12 +12,20 @@ public class SuggestedUser {
     private final User user;
     private final Map<String, Integer> priority;
     private final Map<User, Integer> scores = new HashMap<>();
-    private final ArrayList<User> connections;
+    private ArrayList<User> connections;
 
     public SuggestedUser(User user, Map<String,Integer> priority, ArrayList<User> connections) {
         this.user = user;
         this.priority = priority;
         this.connections = connections;
+    }
+
+    public void setConnections(ArrayList<User> connections) {
+        this.connections = connections;
+    }
+
+    public ArrayList<User> getConnections() {
+        return connections;
     }
 
     private int specialityScore(User user, User connecting) {
