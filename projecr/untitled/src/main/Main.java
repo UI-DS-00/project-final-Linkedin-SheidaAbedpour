@@ -136,9 +136,26 @@ public class Main {
 
     private static void singUp() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("id / name / dateOfBirth / email / universityLocation / field / workplace");
-        User user = new User(scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(),
+        System.out.println("id : ");
+        String id = scanner.next();
+
+        boolean repeated = false;
+        do {
+            repeated = false;
+            for (User u : users)
+                if (u.getId().equals(id)) {
+                    repeated = true;
+                    System.out.println("try another id");
+                    id = scanner.next();
+                    break;
+                }
+        }while (repeated);
+
+        System.out.println("name / dateOfBirth / email / universityLocation / field / workplace");
+        User user = new User(id, scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(),
                 scanner.next(), new ArrayList<>(), new ArrayList<>());
+
+
         System.out.println("num of specialities : ");
         int size = scanner.nextInt();
         for (int i = 0; i < size; i++)
