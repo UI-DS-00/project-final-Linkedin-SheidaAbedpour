@@ -5,7 +5,6 @@ import graph.AdjacencyMapGraph;
 import linkedin.LinkedIn;
 import user.User;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
@@ -13,7 +12,7 @@ import java.util.*;
 
 public class Main {
 
-    public static ArrayList<User> users;
+    public static ArrayList<User> users = new ArrayList<>();
     private static AdjacencyMapGraph<user.User,Integer> adjacencyMapGraph;
     private static User user;
 
@@ -54,7 +53,7 @@ public class Main {
             }
 
             System.out.println();
-            System.out.println("1.login / 2.show list of all users / 3.search user / 4.exit");
+            System.out.println("1.login / 2.show list of all users / 3.search user / 4.sing up / 5.exit");
             command = scanner.nextInt();
         }
 
@@ -81,10 +80,11 @@ public class Main {
         priority.put("universityLocation", 1);
         priority.put("field", 1);
         priority.put("workplace", 1);
+        priority.put("level", 1);
 
         ArrayList<User> suggested = getSuggested(user, priority);
-        for (User sug: suggested)
-            System.out.println(sug);
+        for (int i = 0; i < 20; i++)
+            System.out.println(suggested.get(i));
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println();
 
@@ -93,8 +93,8 @@ public class Main {
         if (givePriority == 1) {
             setPriority(priority);
             suggested = getSuggested(user, priority);
-            for (User sug: suggested)
-                System.out.println(sug);
+            for (int i = 0; i < 20; i++)
+                System.out.println(suggested.get(i));
         }
 
         showMenu();
@@ -103,13 +103,14 @@ public class Main {
     private static void setPriority(Map<String, Integer> priority) {
 
         System.out.println("rate 1 to 5 : ");
-        System.out.println("specialities / universityLocation / field / workplace");
+        System.out.println("specialities / universityLocation / field / workplace / level");
         Scanner scanner = new Scanner(System.in);
 
         priority.put("specialities",scanner.nextInt());
         priority.put("universityLocation", scanner.nextInt());
         priority.put("field", scanner.nextInt());
         priority.put("workplace", scanner.nextInt());
+        priority.put("level", scanner.nextInt());
     }
 
     private static void search() {
@@ -163,12 +164,6 @@ public class Main {
 
         adjacencyMapGraph.insertVertex(user);
         users.add(user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new FileOutputStream("users.json"),user);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private static ArrayList<User> getSuggested(User user, Map<String, Integer> priority) {

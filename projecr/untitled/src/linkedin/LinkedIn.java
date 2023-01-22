@@ -39,11 +39,11 @@ public class LinkedIn {
             connectedUsers.add(Main.getUser(id));
     }
 
-    private ArrayList<User> getConnections(InnerVertex<user.User,?> vertex) {
+    private Map<User, Integer> getConnections(InnerVertex<user.User,?> vertex) {
 
         visited = new HashSet<>();
         Queue<InnerVertex<user.User,?>> level = new LinkedList<>();
-        ArrayList<user.User> connectingList = new ArrayList<>();
+        Map<User, Integer> connectingList = new HashMap<>();
         int levelNumber = 0;
 
         visited.add(vertex);
@@ -63,7 +63,7 @@ public class LinkedIn {
                         visited.add(opposite);
                         nextLevel.add(opposite);
                         if(levelNumber != 1)
-                            connectingList.add(opposite.getElement());
+                            connectingList.put(opposite.getElement(), levelNumber);
                     }
 
                 }
@@ -88,7 +88,7 @@ public class LinkedIn {
     }
 
     public ArrayList<User> suggestedUsers(Map<String, Integer> priority) {
-        ArrayList<User> connections;
+        Map<User, Integer> connections;
         connections = getConnections(adjacencyMapGraph.getVertex(user));
 
         SuggestedUser suggestedUser = new SuggestedUser(user, priority, connections);
@@ -98,12 +98,14 @@ public class LinkedIn {
 
             if (nextLevels.isEmpty()) {
                 for (InnerVertex<user.User, ?> newUser : adjacencyMapGraph.getVertices())
-                    if (!visited.contains(newUser))
-                        connections.addAll(getConnections(newUser));
+                    if (!visited.contains(newUser)) {
+                        connections.putAll(getConnections(newUser));
+                        break;
+                    }
             }
 
             else {
-                connections.addAll(getConnections(nextLevels.peek()));
+                connections.putAll(getConnections(nextLevels.peek()));
             }
 
             suggestedUser.setConnections(connections);

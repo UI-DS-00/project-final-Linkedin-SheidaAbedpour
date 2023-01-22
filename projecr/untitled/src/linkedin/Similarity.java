@@ -13,7 +13,11 @@ public class Similarity {
 
                 if (specialty1.equals(speciality2)) {
 
-                    similarity++;
+                    if (user2.getSpecialties().indexOf(speciality2) < 3)
+                        similarity += 2;
+
+                    else
+                        similarity++;
 
                 }
 

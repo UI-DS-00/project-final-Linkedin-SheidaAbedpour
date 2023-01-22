@@ -12,19 +12,19 @@ public class SuggestedUser {
     private final User user;
     private final Map<String, Integer> priority;
     private final Map<User, Integer> scores = new HashMap<>();
-    private ArrayList<User> connections;
+    private Map<User, Integer> connections = new HashMap<>();
 
-    public SuggestedUser(User user, Map<String,Integer> priority, ArrayList<User> connections) {
+    public SuggestedUser(User user, Map<String,Integer> priority, Map<User,Integer> connections) {
         this.user = user;
         this.priority = priority;
         this.connections = connections;
     }
 
-    public void setConnections(ArrayList<User> connections) {
+    public void setConnections(Map<User,Integer> connections) {
         this.connections = connections;
     }
 
-    public ArrayList<User> getConnections() {
+    public Map<User,Integer> getConnections() {
         return connections;
     }
 
@@ -65,19 +65,31 @@ public class SuggestedUser {
 
     }
 
+    private int levelScore(User connecting) {
+
+        int priorityLevel = priority.get("level");
+
+        if (connections.get(connecting) >= 20)
+            return priorityLevel * 5;
+
+        return (20 - connections.get(connecting)) * priorityLevel;
+
+    }
+
     private int getScore(double similarity, int priority) {
         return (int) similarity * priority;
     }
 
     private int totalScore(User connecting) {
         return specialityScore(user,connecting) + universityLocationScore(user,connecting) +
-                fieldScore(user,connecting) + workplaceScore(user,connecting);
+                fieldScore(user,connecting) + workplaceScore(user,connecting) +
+                levelScore(connecting);
     }
 
     private void rateUsers() {
-        for (User u: connections) {
+        for (User u: connections.keySet()) {
             int totalScore = totalScore(u);
-            if (totalScore >= 200)
+            if (totalScore >= 300)
                 scores.put(u, totalScore);
         }
     }
@@ -107,11 +119,6 @@ public class SuggestedUser {
 
     public ArrayList<User> suggestedUsers() {
         rateUsers();
-
-        if (scores.size() < 20) {
-
-        }
-
         return sort();
     }
 
